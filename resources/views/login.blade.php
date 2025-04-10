@@ -18,11 +18,13 @@
                 <form autocomplete="off" id="formLogin">
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" autofocus>
+                        <input name="username" type="text" class="form-control" id="username" autofocus>
+                        <div class="invalid-feedback" id="invalidUsername"></div>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password">
+                        <input name="password" type="password" class="form-control" id="password">
+                        <div class="invalid-feedback" id="invalidPassword"></div>
                     </div>
                     <div class="d-grid gap-2 col-12 mx-auto mb-3">
                         <button class="btn btn-primary" type="submit">Submit</button>
@@ -38,5 +40,69 @@
 
 <script src="/assets/js/bootstrap.bundle.min.js"></script>
 <script src="/assets/js/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(() => {
+        const token = localStorage.getItem('token')
+
+        function getMe() {
+            $.ajax({
+                url: '/api/me',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                statusCode: {
+                    401: (res) => {
+                        alert(res.responseJSON.message)
+                        localStorage.removeItem('token')
+                    },
+                    200: (res) => {
+                        window.location = '/'
+                    }
+                }
+            })
+        }
+
+        if(token) getMe()
+
+        $('#formLogin').submit((e) => {
+            e.preventDefault()
+
+            $.ajax({
+                url: '/api/authenticate',
+                method: 'POST',
+                data: $('#formLogin').serialize(),
+                dataType: 'JSON',
+                statusCode: {
+                    400: (res) => {
+                        const response = res.responseJSON
+                        const errors = response.errors
+
+                        if(errors.username) {
+                            $('#username').addClass('is-invalid') 
+                            $('#invalidUsername').text(errors.username[0])
+                        } else {
+                            $('#username').removeClass('is-invalid')
+                            $('#invalidUsername').text('')
+                        }
+
+                        if(errors.password) {
+                            $('#password').addClass('is-invalid') 
+                            $('#invalidPassword').text(errors.password[0])
+                        } else {
+                            $('#password').removeClass('is-invalid')
+                            $('#invalidPassword').text('')
+                        }
+                    },
+                    201: (res) => {
+                        if(res.data) {
+                            localStorage.setItem('token', res.data)
+                            window.location = '/'
+                        }
+                    }
+                }
+            })
+        })
+    })
+</script>
 </body>
 </html>
