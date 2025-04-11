@@ -11,3 +11,4 @@ This is screening test Teramedik for Soal B (Laravel) programmed by [Mutaqin Yus
 - Run "php artisan migrate:fresh --seed" on your terminal
 - Run "php artisan serve"
 - Open http://127.0.0.1:8000 on your browser
+- Credentials Login -> username: superadmin password: password123
