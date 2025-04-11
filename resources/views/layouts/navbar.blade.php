@@ -7,17 +7,17 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/">
+                    <a class="nav-link <?= $title == 'Dashboard' ? 'active' : '' ?>" href="/">
                         <i class="fas fa-home"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link <?= $title == 'Hospitals' ? 'active' : '' ?>" href="/hospitals">
                         <i class="fas fa-chart-bar"></i> Hospitals
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link <?= $title == 'Patients' ? 'active' : '' ?>" href="/patients">
                         <i class="fas fa-users"></i> Patients
                     </a>
                 </li>

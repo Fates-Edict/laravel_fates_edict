@@ -8,6 +8,9 @@ class Hospital extends Model
 {
     protected $table = 'hospitals';
     protected $guarded = ['id'];
+    public $searchable = [
+        'name'
+    ];
 
     public function Patients()
     {
